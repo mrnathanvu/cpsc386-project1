@@ -11,6 +11,7 @@ from sound import Sound
 from barrier import Barriers
 
 from startup_screen import StartUpScreen
+from ufo import Ufos
 
 import time
 
@@ -32,7 +33,7 @@ class Game:
         self.sound.play()
         self.sound.pause_bg()
 
-        self.play_button = self.aliens = self.stats = self.sb = self.ship = None
+        self.play_button = self.aliens = self.ufos = self.stats = self.sb = self.ship = None
         self.finished = False
         self.restart()
 
@@ -45,8 +46,10 @@ class Game:
 
         self.barriers = Barriers(game=self)
         self.aliens = Aliens(ship_height=self.ship_height, game=self, barriers=self.barriers)
+        self.ufos = Ufos(ship_height=self.ship_height, game=self, barriers=self.barriers)
         self.ship = Ship(aliens=self.aliens, sound=self.sound, game=self, barriers=self.barriers)
         self.aliens.add_ship(ship=self.ship)
+        self.ufos.add_ship(ship=self.ship)
         self.stats.high_score = self.hs
         self.sb.prep_high_score()
 
@@ -58,6 +61,7 @@ class Game:
             if self.stats.game_active:
                 self.ship.update()
                 self.aliens.update()
+                self.ufos.update()
                 self.barriers.update()
 
                 # print("Aliens left: ", len(self.aliens.alien_group))
@@ -79,6 +83,7 @@ class Game:
 
             self.ship.draw()
             self.aliens.draw()
+            self.ufos.draw()
             self.barriers.draw()
             self.sb.show_score()
             if not self.stats.game_active:
@@ -95,6 +100,8 @@ class Game:
             self.sb.prep_ships()
             self.aliens.empty()
             self.aliens.create_fleet()
+            self.ufos.empty()
+            self.ufos.create_fleet()
             self.ship.center_ship()
             time.sleep(0.5)
             self.ship.timer = Ship.timer

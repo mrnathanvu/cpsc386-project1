@@ -57,3 +57,7 @@ High score was 2
 High score was 4
 High score was 7
 High score was 12
+High score was 4
+High score was 0
+High score was 0
+High score was 6
