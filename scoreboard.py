@@ -22,7 +22,10 @@ class Scoreboard():
         self.prep_ships()
 
     def prep_score(self):
-        rounded_score = int(round(self.stats.score, -1))
+        # rounded_score = int(round(self.stats.score, -1))
+        rounded_score = self.stats.score
+        # print('self.stats.score', self.stats.score)
+        # print('prep_score', rounded_score)
         score_str = "{:,}".format(rounded_score)
         self.score_image = self.font.render(score_str, True, self.text_color,
                                             self.settings.bg_color)
@@ -36,7 +39,10 @@ class Scoreboard():
             self.prep_high_score()
 
     def prep_high_score(self):
-        rounded_score = int(round(self.stats.high_score, -1))
+        # rounded_score = int(round(self.stats.high_score, -1))
+        rounded_score = self.stats.high_score
+        # print('self.stats.high_score', self.stats.high_score)
+        # print('prep_high_score', rounded_score)
         score_str = "{:,}".format(rounded_score)
         self.high_score_image = self.font.render(score_str, True, self.text_color,
                                                  self.settings.bg_color)

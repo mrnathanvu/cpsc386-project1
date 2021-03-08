@@ -44,7 +44,7 @@ class Bullet(Sprite):
     def draw(self):
         # pg.draw.rect(self.screen, self.color, self.rect)
         image = self.timer.imagerect()
-        print(self.timer.frameindex)
+        # print(self.timer.frameindex)
         rect = image.get_rect()
         rect.x, rect.y = self.rect.x, self.rect.y
         self.screen.blit(image, rect)

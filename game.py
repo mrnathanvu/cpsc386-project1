@@ -10,6 +10,8 @@ from scoreboard import Scoreboard
 from sound import Sound
 from barrier import Barriers
 
+from startup_screen import StartUpScreen
+
 import time
 
 
@@ -23,14 +25,19 @@ class Game:
         self.ship_height = ship_image.get_rect().height
         self.hs = 0
 
+        self.background_image = pg.image.load('images/background.bmp')
+        self.background_image = pg.transform.scale(self.background_image, (1200, 800))
+
         self.sound = Sound(bg_music="sounds/startrektheme.wav")
         self.sound.play()
         self.sound.pause_bg()
+
         self.play_button = self.aliens = self.stats = self.sb = self.ship = None
         self.finished = False
         self.restart()
 
     def restart(self):
+        self.startup_screen = StartUpScreen(settings=self.settings, screen=self.screen)
         self.play_button = Button(settings=self.settings, screen=self.screen, msg="Play")
         self.stats = GameStats(settings=self.settings)
         self.sb = Scoreboard(game=self, sound=self.sound)
@@ -43,6 +50,8 @@ class Game:
         self.stats.high_score = self.hs
         self.sb.prep_high_score()
 
+        self.playing_bg_speedy = False
+
     def play(self):
         while not self.finished:
             gf.check_events(stats=self.stats, play_button=self.play_button, ship=self.ship, sound=self.sound, game=self)
@@ -51,12 +60,29 @@ class Game:
                 self.aliens.update()
                 self.barriers.update()
 
-            self.screen.fill(self.settings.bg_color)
+                # print("Aliens left: ", len(self.aliens.alien_group))
+                if len(self.aliens.alien_group) < 46:
+                    if not self.playing_bg_speedy:
+                        self.sound = Sound(bg_music="sounds/startrektheme_speedy.wav")
+                        # print('self.playing_bg_speedy if-before', self.playing_bg_speedy)
+                        self.playing_bg_speedy = True
+                        # print('self.playing_bg_speedy if-after', self.playing_bg_speedy)
+                else:
+                    if self.playing_bg_speedy:
+                        self.sound = Sound(bg_music="sounds/startrektheme.wav")
+                        # print('self.playing_bg_speedy else-before', self.playing_bg_speedy)
+                        self.playing_bg_speedy = False
+                        # print('self.playing_bg_speedy else-after', self.playing_bg_speedy)
+
+            # self.screen.fill(self.settings.bg_color)
+            self.screen.blit(self.background_image, (0, 0))
+
             self.ship.draw()
             self.aliens.draw()
             self.barriers.draw()
             self.sb.show_score()
             if not self.stats.game_active:
+                self.startup_screen.draw()
                 self.play_button.draw()
                 self.sound.pause_bg()
             else:
