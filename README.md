@@ -25,7 +25,7 @@
 
 ✅ 9. Ominous background music becomes faster as the number of aliens decrease. 
 
-❌ 10. Pycharm IDE shows green checkmarks for every Python source file. 
+✅ 10. Pycharm IDE shows green checkmarks for every Python source file. 
 
 ✅ 11. Project directory pushed to new GitHub repository listed above. 
 
